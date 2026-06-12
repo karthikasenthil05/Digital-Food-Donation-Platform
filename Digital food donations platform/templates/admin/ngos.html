@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Manage NGOs - Food Donation{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>🏢 Manage NGOs</h1>
+
+    <div class="card fade-in" style="margin-top: 2rem;">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>NGO Name</th>
+                        <th>Reg. Number</th>
+                        <th>Contact</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ngo in ngos %}
+                    <tr>
+                        <td style="font-weight: 500;">
+                            {{ ngo.ngo_name }}
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">{{ ngo.email }}</div>
+                        </td>
+                        <td>{{ ngo.registration_number }}</td>
+                        <td>{{ ngo.phone_number }}</td>
+                        <td>{{ ngo.location }}</td>
+                        <td>
+                            {% if ngo.is_verified %}
+                            <span class="badge badge-success">Verified</span>
+                            {% else %}
+                            <span class="badge badge-warning">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not ngo.is_verified %}
+                            <a href="{{ url_for('admin_verify_ngo', ngo_id=ngo.id) }}" class="btn btn-sm btn-success"
+                                onclick="return confirmAction('Verify this NGO? They will act immediately.')">
+                                Verify Now
+                            </a>
+                            {% else %}
+                            <button class="btn btn-sm btn-secondary" disabled>Verified</button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Donate Food - Food Donation{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 700px; margin-top: 2rem;">
+    <div class="card fade-in">
+        <div class="card-header">
+            🍲 Post Food Donation
+        </div>
+
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <div class="row" style="margin-bottom: 0;">
+                <div class="col" style="min-width: 300px;">
+                    <div class="form-group">
+                        {{ form.food_name.label(class="form-label") }}
+                        {{ form.food_name(class="form-control", placeholder="e.g. Rice and Curry, Biryani") }}
+                        {% if form.food_name.errors %}
+                        <div class="form-error">{{ form.food_name.errors[0] }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col" style="min-width: 200px;">
+                    <div class="form-group">
+                        {{ form.quantity.label(class="form-label") }}
+                        {{ form.quantity(class="form-control", placeholder="e.g. 50 plates, 5kg") }}
+                        {% if form.quantity.errors %}
+                        <div class="form-error">{{ form.quantity.errors[0] }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom: 0;">
+                <div class="col" style="min-width: 200px;">
+                    <div class="form-group">
+                        {{ form.food_time.label(class="form-label") }}
+                        {{ form.food_time(class="form-control") }}
+                        {% if form.food_time.errors %}
+                        <div class="form-error">{{ form.food_time.errors[0] }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col" style="min-width: 200px;">
+                    <div class="form-group">
+                        {{ form.expiry_datetime.label(class="form-label") }}
+                        {{ form.expiry_datetime(class="form-control") }}
+                        <small style="color: var(--text-muted);">When does this food expire?</small>
+                        {% if form.expiry_datetime.errors %}
+                        <div class="form-error">{{ form.expiry_datetime.errors[0] }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form.location.label(class="form-label") }}
+                {{ form.location(class="form-control") }}
+                {% if form.location.errors %}
+                <div class="form-error">{{ form.location.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.description.label(class="form-label") }}
+                {{ form.description(class="form-control", placeholder="Any specific details? (e.g. Vegetarian, Contains
+                nuts)", rows="3") }}
+                {% if form.description.errors %}
+                <div class="form-error">{{ form.description.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <div class="alert alert-info">
+                ℹ️ Your contact number ({{ current_user.phone_number }}) will be shared with the NGO/Recipient who
+                accepts this donation.
+            </div>
+
+            <div class="form-group" style="margin-top: 1.5rem;">
+                {{ form.submit(class="btn btn-primary", style="width: 100%;") }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

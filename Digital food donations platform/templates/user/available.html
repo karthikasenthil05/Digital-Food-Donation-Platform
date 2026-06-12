@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Available Food - Food Donation{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row" style="align-items: center; margin-bottom: 2rem;">
+        <div class="col">
+            <h1>🍱 Available Donations</h1>
+        </div>
+
+        <!-- Filters -->
+        <div class="col" style="text-align: right;">
+            <form action="{{ url_for('user_available') }}" method="GET" style="display: inline-flex; gap: 1rem;">
+                <select name="location" class="form-control" style="width: auto;" onchange="this.form.submit()">
+                    <option value="">All Locations</option>
+                    <option value="Chennai" {% if request.args.get('location')=='Chennai' %}selected{% endif %}>Chennai
+                    </option>
+                    <option value="Coimbatore" {% if request.args.get('location')=='Coimbatore' %}selected{% endif %}>
+                        Coimbatore</option>
+                    <option value="Madurai" {% if request.args.get('location')=='Madurai' %}selected{% endif %}>Madurai
+                    </option>
+                    <option value="Trichy" {% if request.args.get('location')=='Trichy' %}selected{% endif %}>Trichy
+                    </option>
+                    <option value="Salem" {% if request.args.get('location')=='Salem' %}selected{% endif %}>Salem
+                    </option>
+                </select>
+
+                <select name="time" class="form-control" style="width: auto;" onchange="this.form.submit()">
+                    <option value="">Any Time</option>
+                    <option value="morning" {% if request.args.get('time')=='morning' %}selected{% endif %}>Morning
+                    </option>
+                    <option value="afternoon" {% if request.args.get('time')=='afternoon' %}selected{% endif %}>
+                        Afternoon</option>
+                    <option value="night" {% if request.args.get('time')=='night' %}selected{% endif %}>Night</option>
+                </select>
+            </form>
+        </div>
+    </div>
+
+    {% if donations %}
+    <div class="row">
+        {% for donation in donations %}
+        <div class="col-3">
+            <div class="card fade-in" style="height: 100%; display: flex; flex-direction: column;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                    <span class="badge badge-secondary">{{ donation.food_time|capitalize }}</span>
+                    <span data-expiry="{{ donation.expiry_datetime }}" class="badge badge-success">Active</span>
+                </div>
+
+                <h3 style="margin-bottom: 0.5rem; color: var(--text-primary);">{{ donation.food_name }}</h3>
+                <p style="color: var(--primary); font-weight: 600; margin-bottom: 1rem;">{{ donation.quantity }}</p>
+
+                <div style="margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">
+                    📍 {{ donation.location }}
+                </div>
+
+                <div style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-secondary);">
+                    🕒 Expires: {{ donation.expiry_datetime.strftime('%d %b, %I:%M %p') }}
+                </div>
+
+                {% if donation.description %}
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem; flex-grow: 1;">
+                    {{ donation.description }}
+                </p>
+                {% else %}
+                <div style="flex-grow: 1;"></div>
+                {% endif %}
+
+                <div style="border-top: 1px solid var(--glass-border); padding-top: 1rem; margin-top: auto;">
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+                        Donor: {{ donation.donor.username }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 4rem; background: var(--glass-bg); border-radius: 16px;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">🍽️</div>
+        <h3>No food available right now</h3>
+        <p style="color: var(--text-secondary);">Check back later or try changing the filters.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

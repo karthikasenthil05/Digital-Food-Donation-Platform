@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Digital Food Donations{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Hero Section -->
+    <div class="hero fade-in">
+        <h1>🍲 Digital Food Donations Platform</h1>
+        <p>Connecting food donors with those in need. Reduce waste, feed hope, make a difference.</p>
+        <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+            <a href="{{ url_for('register') }}" class="btn btn-primary">Get Started</a>
+            <a href="{{ url_for('login') }}" class="btn btn-outline">Login</a>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-grid">
+        <div class="stat-card fade-in">
+            <div class="stat-value">{{ stats.total }}</div>
+            <div class="stat-label">Total Donations</div>
+        </div>
+        <div class="stat-card fade-in">
+            <div class="stat-value">{{ stats.available }}</div>
+            <div class="stat-label">Available Now</div>
+        </div>
+        <div class="stat-card fade-in">
+            <div class="stat-value">{{ stats.collected }}</div>
+            <div class="stat-label">Successfully Collected</div>
+        </div>
+    </div>
+
+    <!-- How It Works -->
+    <div class="card fade-in">
+        <div class="card-header text-center">How It Works</div>
+        <div class="row" style="margin-top: 2rem;">
+            <div class="col-3">
+                <div style="text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">👤</div>
+                    <h3 style="color: var(--primary); margin-bottom: 0.5rem;">1. Register</h3>
+                    <p style="color: var(--text-secondary);">Sign up as a donor, recipient, or NGO</p>
+                </div>
+            </div>
+            <div class="col-3">
+                <div style="text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🍱</div>
+                    <h3 style="color: var(--primary); margin-bottom: 0.5rem;">2. Post/Find Food</h3>
+                    <p style="color: var(--text-secondary);">Donors post available food, recipients search nearby</p>
+                </div>
+            </div>
+            <div class="col-3">
+                <div style="text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🤝</div>
+                    <h3 style="color: var(--primary); margin-bottom: 0.5rem;">3. Connect</h3>
+                    <p style="color: var(--text-secondary);">NGOs accept donations and contact donors</p>
+                </div>
+            </div>
+            <div class="col-3">
+                <div style="text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+                    <h3 style="color: var(--primary); margin-bottom: 0.5rem;">4. Confirm</h3>
+                    <p style="color: var(--text-secondary);">Pickup confirmed, food reaches those in need</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <div class="row" style="margin-top: 3rem;">
+        <div class="col-2">
+            <div class="card fade-in">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">📍</div>
+                <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Location-Based</h3>
+                <p style="color: var(--text-secondary);">Find food donations near you with smart location matching</p>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="card fade-in">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">⏰</div>
+                <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Real-Time Tracking</h3>
+                <p style="color: var(--text-secondary);">Track donation status and expiry times in real-time</p>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="card fade-in">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">🔒</div>
+                <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Verified NGOs</h3>
+                <p style="color: var(--text-secondary);">Admin-verified NGOs ensure transparency and trust</p>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="card fade-in">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">📊</div>
+                <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Impact Reports</h3>
+                <p style="color: var(--text-secondary);">View your contribution and community impact</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="card text-center"
+        style="margin-top: 3rem; background: linear-gradient(135deg, rgba(231, 111, 81, 0.1) 0%, rgba(42, 157, 143, 0.1) 100%);">
+        <h2 style="color: var(--primary); margin-bottom: 1rem;">Ready to Make a Difference?</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.1rem;">
+            Join thousands of donors and NGOs working together to reduce food waste and feed those in need.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+            <a href="{{ url_for('register') }}" class="btn btn-primary">Register Now</a>
+            <a href="{{ url_for('login') }}" class="btn btn-secondary">Login</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

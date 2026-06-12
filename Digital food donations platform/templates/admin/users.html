@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Users - Food Donation{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>👥 Manage Users</h1>
+
+    <div class="card fade-in" style="margin-top: 2rem;">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Location</th>
+                        <th>Phone</th>
+                        <th>Joined</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td style="font-weight: 500;">{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            {% if user.role == 'donor' %}
+                            <span class="badge badge-success">Donor</span>
+                            {% else %}
+                            <span class="badge badge-info">Recipient</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ user.location }}</td>
+                        <td>{{ user.phone_number }}</td>
+                        <td>{{ user.created_at.strftime('%d %b %Y') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

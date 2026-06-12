@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block title %}NGO Dashboard - Food Donation{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row" style="align-items: center; margin-bottom: 2rem;">
+        <div class="col-3">
+            <h1>🏢 {{ current_user.ngo_name }}</h1>
+            <p style="color: var(--text-muted);">
+                {% if current_user.is_verified %}
+                <span class="badge badge-success">✅ Verified NGO</span>
+                {% else %}
+                <span class="badge badge-warning">⏳ Pending Verification</span>
+                {% endif %}
+            </p>
+        </div>
+        <div class="col" style="text-align: right;">
+            <a href="{{ url_for('ngo_nearby') }}" class="btn btn-primary">
+                📍 Find Nearby Food
+            </a>
+        </div>
+    </div>
+
+    {% if not current_user.is_verified %}
+    <div class="alert alert-warning fade-in">
+        <strong>Account Pending Verification:</strong> You can view donations but need admin approval to accept them.
+    </div>
+    {% endif %}
+
+    <!-- Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.nearby_count }}</div>
+            <div class="stat-label">Nearby Donations</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" style="color: var(--warning);">{{ stats.accepted_count }}</div>
+            <div class="stat-label">Pending Pickup</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" style="color: var(--success);">{{ stats.collected_count }}</div>
+            <div class="stat-label">Collected</div>
+        </div>
+    </div>
+
+    <!-- Active Pickups -->
+    <div class="card fade-in" style="margin-bottom: 2rem;">
+        <div class="card-header">
+            🚚 Active Pickups
+        </div>
+
+        {% if accepted %}
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Food Item</th>
+                        <th>Donor</th>
+                        <th>Contact</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for donation in accepted %}
+                    {% if donation.status == 'accepted' %}
+                    <tr>
+                        <td style="font-weight: 500;">{{ donation.food_name }}</td>
+                        <td>{{ donation.donor.username }}</td>
+                        <td>
+                            <a href="tel:{{ donation.donor.phone_number }}"
+                                style="color: var(--primary); text-decoration: none;">
+                                📞 {{ donation.donor.phone_number }}
+                            </a>
+                        </td>
+                        <td>{{ donation.location }}</td>
+                        <td><span class="badge badge-warning">Accepted</span></td>
+                        <td>
+                            <a href="{{ url_for('ngo_confirm', donation_id=donation.id) }}"
+                                class="btn btn-sm btn-primary"
+                                onclick="return confirmAction('Confirm that you have collected this food?')">
+                                ✅ Confirm Pickup
+                            </a>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if stats.accepted_count == 0 %}
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                            No active pickups. Go find some food!
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div style="text-align: center; padding: 2rem;">
+            <h3>No recent activity</h3>
+            <p style="color: var(--text-secondary);">Start delivering happiness by finding nearby food.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Recently Collected -->
+    <div class="card fade-in">
+        <div class="card-header">
+            Recently Collected
+            <a href="{{ url_for('ngo_history') }}"
+                style="float: right; font-size: 0.9rem; margin-top: 0.5rem; text-decoration: none;">View History</a>
+        </div>
+
+        {% if accepted %}
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Food Item</th>
+                        <th>Donor</th>
+                        <th>Quantity</th>
+                        <th>Collected At</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for donation in accepted %}
+                    {% if donation.status == 'collected' %}
+                    <tr>
+                        <td style="font-weight: 500;">{{ donation.food_name }}</td>
+                        <td>{{ donation.donor.username }}</td>
+                        <td>{{ donation.quantity }}</td>
+                        <td>{{ donation.updated_at|time_ago }}</td>
+                        <td><span class="badge badge-info">Collected</span></td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

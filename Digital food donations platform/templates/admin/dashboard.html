@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Food Donation{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row" style="align-items: center; margin-bottom: 2rem;">
+        <div class="col">
+            <h1>👑 Admin Dashboard</h1>
+        </div>
+        <div class="col" style="text-align: right;">
+            <span class="badge badge-secondary" style="font-size: 1rem; padding: 0.5rem 1rem;">
+                {{ stats.total }} Total Donations
+            </span>
+        </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">{{ users_count }}</div>
+            <div class="stat-label">Total Users</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ ngos_count }}</div>
+            <div class="stat-label">Total NGOs</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" style="color: var(--warning);">{{ pending_ngos }}</div>
+            <div class="stat-label">Pending Verifications</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" style="color: var(--success);">{{ stats.collected }}</div>
+            <div class="stat-label">Successful Donations</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Quick Actions -->
+        <div class="col-3">
+            <div class="card fade-in" style="height: 100%;">
+                <div class="card-header">Quick Actions</div>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <a href="{{ url_for('admin_ngos') }}" class="btn btn-outline" style="text-align: left;">
+                        🏢 Manage NGOs
+                        {% if pending_ngos > 0 %}
+                        <span class="badge badge-warning" style="float: right;">{{ pending_ngos }}</span>
+                        {% endif %}
+                    </a>
+                    <a href="{{ url_for('admin_users') }}" class="btn btn-outline" style="text-align: left;">
+                        👥 Manage Users
+                    </a>
+                    <a href="{{ url_for('admin_donations') }}" class="btn btn-outline" style="text-align: left;">
+                        🍱 Monitor Donations
+                    </a>
+                    <a href="{{ url_for('admin_check_expired') }}" class="btn btn-danger" style="text-align: left;"
+                        onclick="return confirmAction('Run manual expiry check?')">
+                        🗑️ Clean Expired Food
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="col-2" style="flex: 2;">
+            <div class="card fade-in">
+                <div class="card-header">Recent System Activity</div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Activity</th>
+                                <th>User</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for donation in recent_donations %}
+                            <tr>
+                                <td>New donation: {{ donation.food_name }}</td>
+                                <td>{{ donation.donor.username }}</td>
+                                <td>{{ donation.created_at|time_ago }}</td>
+                                <td>
+                                    {% if donation.status == 'available' %}
+                                    <span class="badge badge-success">New</span>
+                                    {% elif donation.status == 'accepted' %}
+                                    <span class="badge badge-warning">Accepted</span>
+                                    {% elif donation.status == 'collected' %}
+                                    <span class="badge badge-info">Done</span>
+                                    {% elif donation.status == 'expired' %}
+                                    <span class="badge badge-danger">Expired</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

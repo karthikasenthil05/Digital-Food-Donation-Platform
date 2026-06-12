@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Food Donation{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; margin-top: 3rem;">
+    <div class="card fade-in">
+        <div class="card-header text-center">
+            <h2>📝 Register</h2>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">
+                Join our community to help reduce food waste.
+            </p>
+        </div>
+
+        <!-- Role Toggle -->
+        <div
+            style="display: flex; gap: 1rem; margin-bottom: 2rem; background: var(--bg-tertiary); padding: 0.5rem; border-radius: 12px;">
+            <button id="btn-user" class="btn btn-primary" style="flex: 1;" onclick="showForm('user')">User
+                (Donor/Recipient)</button>
+            <button id="btn-ngo" class="btn" style="flex: 1; background: transparent; color: var(--text-secondary);"
+                onclick="showForm('ngo')">NGO / Organization</button>
+        </div>
+
+        <!-- User Registration Form -->
+        <div id="form-user">
+            <h3 style="margin-bottom: 1.5rem; color: var(--primary);">User Registration</h3>
+            <form method="POST" action="{{ url_for('register') }}">
+                {{ user_form.hidden_tag() }}
+
+                <div class="form-group">
+                    {{ user_form.username.label(class="form-label") }}
+                    {{ user_form.username(class="form-control", placeholder="Choose a username") }}
+                    {% if user_form.username.errors %}
+                    <div class="form-error">{{ user_form.username.errors[0] }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ user_form.email.label(class="form-label") }}
+                    {{ user_form.email(class="form-control", placeholder="Enter your email") }}
+                    {% if user_form.email.errors %}
+                    <div class="form-error">{{ user_form.email.errors[0] }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ user_form.phone_number.label(class="form-label") }}
+                    {{ user_form.phone_number(class="form-control", placeholder="Enter your phone number",
+                    oninput="formatPhoneNumber(this)") }}
+                    {% if user_form.phone_number.errors %}
+                    <div class="form-error">{{ user_form.phone_number.errors[0] }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ user_form.location.label(class="form-label") }}
+                    {{ user_form.location(class="form-control") }}
+                    {% if user_form.location.errors %}
+                    <div class="form-error">{{ user_form.location.errors[0] }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ user_form.role.label(class="form-label") }}
+                    {{ user_form.role(class="form-control") }}
+                    {% if user_form.role.errors %}
+                    <div class="form-error">{{ user_form.role.errors[0] }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="row" style="margin-bottom: 0;">
+                    <div class="col" style="min-width: 200px;">
+                        <div class="form-group">
+                            {{ user_form.password.label(class="form-label") }}
+                            {{ user_form.password(class="form-control", placeholder="Create password") }}
+                            {% if user_form.password.errors %}
+                            <div class="form-error">{{ user_form.password.errors[0] }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col" style="min-width: 200px;">
+                        <div class="form-group">
+                            {{ user_form.confirm_password.label(class="form-label") }}
+                            {{ user_form.confirm_password(class="form-control", placeholder="Confirm password") }}
+                            {% if user_form.confirm_password.errors %}
+                            <div class="form-error">{{ user_form.confirm_password.errors[0] }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <button type="submit" name="user_submit" class="btn btn-primary" style="width: 100%;">Register as
+                        User</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- NGO Registration Form -->
+        <div id="form-ngo" style="display: none;">
+            <h3 style="margin-bottom: 1.5rem; color: var(--secondary);">NGO Registration</h3>
+            <div class="alert alert-info">
+                ℹ️ NGO accounts require admin verification before logging in.
+            </div>
+
+            <form method="POST" action="{{ url_for('register') }}">
+                {{ ngo_form.hidden_tag() }}
+
+                <div class="form-group">
+                    {{ ngo_form.ngo_name.label(class="form-label") }}
+                    {{ ngo_form.ngo_name(class="form-control", placeholder="Enter NGO name") }}
+                    {% if ngo_form.ngo_name.errors %}
+                    <div class="form-error">{{ ngo_form.ngo_name.errors[0] }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ ngo_form.email.label(class="form-label") }}
+                    {{ ngo_form.email(class="form-control", placeholder="Official email address") }}
+                    {% if ngo_form.email.errors %}
+                    <div class="form-error">{{ ngo_form.email.errors[0] }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ ngo_form.phone_number.label(class="form-label") }}
+                    {{ ngo_form.phone_number(class="form-control", placeholder="Contact number",
+                    oninput="formatPhoneNumber(this)") }}
+                    {% if ngo_form.phone_number.errors %}
+                    <div class="form-error">{{ ngo_form.phone_number.errors[0] }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="row" style="margin-bottom: 0;">
+                    <div class="col" style="min-width: 200px;">
+                        <div class="form-group">
+                            {{ ngo_form.location.label(class="form-label") }}
+                            {{ ngo_form.location(class="form-control") }}
+                            {% if ngo_form.location.errors %}
+                            <div class="form-error">{{ ngo_form.location.errors[0] }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col" style="min-width: 200px;">
+                        <div class="form-group">
+                            {{ ngo_form.registration_number.label(class="form-label") }}
+                            {{ ngo_form.registration_number(class="form-control", placeholder="Govt. Reg. No") }}
+                            {% if ngo_form.registration_number.errors %}
+                            <div class="form-error">{{ ngo_form.registration_number.errors[0] }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ ngo_form.address.label(class="form-label") }}
+                    {{ ngo_form.address(class="form-control", placeholder="Full physical address", rows="3") }}
+                    {% if ngo_form.address.errors %}
+                    <div class="form-error">{{ ngo_form.address.errors[0] }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="row" style="margin-bottom: 0;">
+                    <div class="col" style="min-width: 200px;">
+                        <div class="form-group">
+                            {{ ngo_form.password.label(class="form-label") }}
+                            {{ ngo_form.password(class="form-control", placeholder="Create password") }}
+                            {% if ngo_form.password.errors %}
+                            <div class="form-error">{{ ngo_form.password.errors[0] }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col" style="min-width: 200px;">
+                        <div class="form-group">
+                            {{ ngo_form.confirm_password.label(class="form-label") }}
+                            {{ ngo_form.confirm_password(class="form-control", placeholder="Confirm password") }}
+                            {% if ngo_form.confirm_password.errors %}
+                            <div class="form-error">{{ ngo_form.confirm_password.errors[0] }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <button type="submit" name="ngo_submit" class="btn btn-secondary" style="width: 100%;">Register
+                        NGO</button>
+                </div>
+            </form>
+        </div>
+
+        <div
+            style="text-align: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--glass-border);">
+            <p style="color: var(--text-secondary);">
+                Already have an account?
+                <a href="{{ url_for('login') }}"
+                    style="color: var(--primary); text-decoration: none; font-weight: 600;">
+                    Login here
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showForm(type) {
+        if (type === 'user') {
+            document.getElementById('form-user').style.display = 'block';
+            document.getElementById('form-ngo').style.display = 'none';
+
+            document.getElementById('btn-user').classList.add('btn-primary');
+            document.getElementById('btn-user').style.background = 'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)';
+            document.getElementById('btn-user').style.color = 'white';
+
+            document.getElementById('btn-ngo').classList.remove('btn-secondary');
+            document.getElementById('btn-ngo').style.background = 'transparent';
+            document.getElementById('btn-ngo').style.color = 'var(--text-secondary)';
+        } else {
+            document.getElementById('form-user').style.display = 'none';
+            document.getElementById('form-ngo').style.display = 'block';
+
+            document.getElementById('btn-user').classList.remove('btn-primary');
+            document.getElementById('btn-user').style.background = 'transparent';
+            document.getElementById('btn-user').style.color = 'var(--text-secondary)';
+
+            document.getElementById('btn-ngo').classList.add('btn-secondary');
+            document.getElementById('btn-ngo').style.background = 'linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%)';
+            document.getElementById('btn-ngo').style.color = 'white';
+        }
+    }
+</script>
+{% endblock %}
