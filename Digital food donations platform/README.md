@@ -106,3 +106,23 @@ Access the app at: `http://localhost:5000`
 ## 🌱 Contribution
 
 We reduce waste when we work together. Feel free to fork this project and contribute to its development!
+## 📸 Screenshots
+
+### Home Page
+![Home Page](screenshots/HOME.png)
+![Home Page](screenshots/HOME2.png)
+![Home Page](screenshots/HOME3.png)
+### Login Page
+![Login Page](screenshots/LOGIN.png)
+
+### Register Page
+![Register Page](screenshots/REGISTER.png)
+
+### User Dashboard
+![User Dashboard](screenshots/USER.png)
+
+### NGO Dashboard
+![NGO Dashboard](screenshots/NGO.png)
+
+### Admin Dashboard
+![Admin Dashboard](screenshots/admin dashboard.png)
